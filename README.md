@@ -24,7 +24,8 @@ Programs must run from the command line and read input from standard input in gp
 Sample program: 
 
 Compilation: g++ -o file_name prims.cpp
-Execution: graph.gph | ./file_name
+
+Execution: cat graph.gph | ./file_name
 
 Or:
 
