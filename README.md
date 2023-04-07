@@ -24,15 +24,22 @@ Programs must run from the command line and read input from standard input in gp
 Sample program: 
 
 Compilation: g++ -o file_name prims.cpp
-Execution: graph.gph | ./file_name
+
+Execution: cat graph.gph | ./file_name
 
 Or:
 
 ./file_name
 g 7 6
+
 e 1 2 8
+
 e 1 3 7
+
 e 2 4 4
+
 e 2 5 3
+
 e 3 6 2
+
 e 3 7 1
