@@ -1,0 +1,15 @@
+c 5 7 100 1
+c Delaunay triangulation: 5 vertices, 7 edges, seed = 1, Sat Mar 11 22:49:36 2023
+g 5 7
+n 1 83 99 
+n 2 44 86 
+n 3 1 25 
+n 4 60 100 
+n 5 29 47 
+e 1 4 22
+e 1 2 41
+e 1 5 75
+e 2 5 42
+e 2 4 21
+e 2 3 75
+e 3 5 36
