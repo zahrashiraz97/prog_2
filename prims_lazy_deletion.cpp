@@ -13,6 +13,8 @@ typedef struct ge //graph edge
 	long source; //vertex on one end
 	long target; //vertex on the other end
 	long weight;
+	struct gv *source_ptr;
+	struct gv *target_ptr;
 
 } ge;
 
@@ -22,9 +24,9 @@ typedef struct gv //graph vertex
 	vector<ge*> edges; //https://www.geeksforgeeks.org/cpp-vector-of-pointers/
 } gv;
 
-vector<gv> vertices;
+vector<gv*> vertices;
 vector<ge*> g_edges;
-vector<ge> mst_edges;
+vector<ge*> mst_edges;
 
 // ePair ==>  pair of weight of edge and ptr to edge object
 typedef pair<long, ge*> ePair;
@@ -146,25 +148,28 @@ void add_new_edge(long source, long target, long weight)
 	new_edge->source = source;
 	new_edge->target = target;
 	new_edge->weight = weight;
-	g_edges.push_back(new_edge);
+	// g_edges.push_back(new_edge);
 	// ge current_edge = g_edges[g_edges.size() - 1];
 	ge *edge = new_edge;
 	// cout<<"source = "<<source<<" target = "<<target<<" weight = "<<weight<<endl;
 	int flag = 0; //source and target not updated
-	vector<gv>::iterator ptr;
+	vector<gv*>::iterator v_ptr;
 	bool flag_src = true;
 	bool flag_target = true;
-	for(ptr=vertices.begin(); ptr<vertices.end(); ptr++)
+	for(v_ptr=vertices.begin(); v_ptr<vertices.end(); v_ptr++)
 	{
+		gv *ptr = *v_ptr;
 		if (ptr->vertex == source)
 		{
-			(ptr->edges).push_back(edge);
+			new_edge->source_ptr = ptr;
+			// (ptr->edges).push_back(edge);
 			flag++;
 			flag_src = false;
 		}
 		if (ptr->vertex == target)
 		{
-			(ptr->edges).push_back(edge);
+			new_edge->target_ptr = ptr;
+			// (ptr->edges).push_back(edge);
 			flag++;
 			flag_target = false;
 		}
@@ -175,41 +180,64 @@ void add_new_edge(long source, long target, long weight)
 	}
 	if (flag == 0) //add both source and target
 	{
-		gv s;
-		s.vertex = source;
-		(s.edges).push_back(edge);
-		vertices.push_back(s);
+		// cout<<"Here A"<<endl;
+		gv *s = new gv;
+		// gv s;
+		s->vertex = source;
+		new_edge->source_ptr = s;
+		// (s.edges).push_back(edge);
+				// cout<<"Here Aa"<<endl;
 
-		gv t;
-		t.vertex = target;
-		(t.edges).push_back(edge);
+		vertices.push_back(s);
+				// cout<<"Here Aab"<<endl;
+
+		gv *t = new gv;
+		t->vertex = target;
+		// (t.edges).push_back(edge);
+		new_edge->target_ptr = t;
 		vertices.push_back(t);
 
 	}
 	else if (flag_target == true) //target to be added
 	{
-		gv t;
-		t.vertex = target;
-		(t.edges).push_back(edge);
+		// cout<<"Here b"<<endl;
+		gv *t = new gv;
+		t->vertex = target;
+		// (t.edges).push_back(edge);
+		new_edge->target_ptr = t;
 		vertices.push_back(t);
 	}
 	else if (flag_src == true) //source to be added
 	{
-		gv s;
-		s.vertex = source;
-		(s.edges).push_back(edge);
+		// cout<<"Here C"<<endl;
+		gv *s = new gv;
+		// gv s;
+		s->vertex = source;
+		new_edge->source_ptr = s;
+		// (s.edges).push_back(edge);
 		vertices.push_back(s);
+
 	}
 	else //nothing to be done
 	{
 
 	}
+	gv *s_ptr = new_edge->source_ptr;
+	gv *t_ptr = new_edge->target_ptr;
+	// cout<<"source ptr is "<<s_ptr<<endl;
+	// cout<<"target ptr is "<<t_ptr<<endl;
+			((s_ptr)->edges).push_back(new_edge);
+			((t_ptr)->edges).push_back(new_edge);
+			 			// cout<<"Here Outside"<<endl;
 
-	// //cout<<"New updated made to vertices vector: "<<endl;
-	// vector<gv>::iterator ptr2;
+ 			g_edges.push_back(new_edge);
+
+	//cout<<"New updated made to vertices vector: "<<endl;
+	// vector<gv*>::iterator ptr2;
 	// for(ptr2=vertices.begin(); ptr2<vertices.end(); ptr2++)
 	// {
-	// 	gv v = *ptr2;
+	// 	gv *v_ptr = *ptr2;
+	// 	gv v = *v_ptr;
 	// 	//cout<<"Vertex is "<<v.vertex<<endl;
 	// 	vector<ge*>::iterator ptr;
 	// 	for(ptr=(v.edges).begin(); ptr<(v.edges).end(); ptr++)
@@ -231,10 +259,11 @@ long prim_jarnik_mst()
     // To keep track of vertices included in MST
     vector<bool> inMST(num_vertices, false);
 
-      vector<gv>::iterator ptr;
+      vector<gv*>::iterator ptr;
 			for(ptr=vertices.begin(); ptr<vertices.end(); ptr++)
 			{
-				gv v = *ptr;
+				gv *v_ptr = *ptr;
+				gv v = *v_ptr;
 
 				vector<ge*>::iterator ptr2;
 				for(ptr2=(v.edges).begin(); ptr2<(v.edges).end(); ptr2++)
@@ -250,7 +279,7 @@ long prim_jarnik_mst()
     /* Looping till priority queue becomes empty */
     while (mh.Count() > 0)
     {
-    
+    cout<<"Dequeuing "<<endl;
      	ge *ptr_to_edge = mh.min_heap_check_top().second; 
     	ge e = *ptr_to_edge;
 
@@ -262,25 +291,28 @@ long prim_jarnik_mst()
     	}
 
     	long v;
+    	gv *other_vertex = NULL;
     	if (inMST[e.source])
     	{
     		v = e.target;
+    		other_vertex = e.target_ptr;
     	}
     	else if (inMST[e.target])
     	{
     		v = e.source;
+    		other_vertex = e.source_ptr;
     	}
-    	mst_edges.push_back(e);
+    	mst_edges.push_back(ptr_to_edge);
     	inMST[v] = true;
 
-    	vector<gv>::iterator ptr;
-			for(ptr=vertices.begin(); ptr<vertices.end(); ptr++)
-			{
+    	// vector<gv>::iterator ptr;
+			// for(ptr=vertices.begin(); ptr<vertices.end(); ptr++)
+			// {
 
-				if(ptr->vertex == v)
-				{
+			// 	if(ptr->vertex == v)
+			// 	{
 					vector<ge*>::iterator ptr2;
-					for(ptr2=(ptr->edges).begin(); ptr2<(ptr->edges).end(); ptr2++)
+					for(ptr2=(other_vertex->edges).begin(); ptr2<(other_vertex->edges).end(); ptr2++)
 					{
 						long z;
 						ge *ptr_to_edge = *ptr2;
@@ -299,18 +331,19 @@ long prim_jarnik_mst()
 							mh.min_heap_enqueue(make_pair(e.weight, ptr_to_edge));
 						}
 					}		
-				}
+			// 	}
 
-			}
+			// }
 		}
  
 
-    vector<ge>::iterator mst;
+    vector<ge*>::iterator mst;
     long mst_weight = 0;
     cout<<"g "<<num_vertices<<" "<<num_vertices-1<<endl;
 	for(mst=mst_edges.begin(); mst<mst_edges.end(); mst++)
 	{
-		ge e = *mst;
+		ge *ptr_to_edge = *mst;
+		ge e = *ptr_to_edge;
 		cout<<"e "<<e.source<<" "<<e.target<<" "<<e.weight<<endl;
 		mst_weight += e.weight;
 	}
