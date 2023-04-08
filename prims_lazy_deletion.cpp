@@ -21,7 +21,7 @@ typedef struct ge //graph edge
 typedef struct gv //graph vertex
 {
 	long vertex; //number representing the vertex
-	vector<ge*> edges; //https://www.geeksforgeeks.org/cpp-vector-of-pointers/
+	vector<ge*> edges;
 } gv;
 
 vector<gv*> vertices;
@@ -144,15 +144,12 @@ class min_heap {
 
 void add_new_edge(long source, long target, long weight)
 {
-	// cout<<"Adding new edge"<<endl;
 	ge *new_edge = new ge;
 	new_edge->source = source;
 	new_edge->target = target;
 	new_edge->weight = weight;
-	// g_edges.push_back(new_edge);
-	// ge current_edge = g_edges[g_edges.size() - 1];
+
 	ge *edge = new_edge;
-	// cout<<"source = "<<source<<" target = "<<target<<" weight = "<<weight<<endl;
 	int flag = 0; //source and target not updated
 	vector<gv*>::iterator v_ptr;
 	bool flag_src = true;
@@ -163,14 +160,12 @@ void add_new_edge(long source, long target, long weight)
 		if (ptr->vertex == source)
 		{
 			new_edge->source_ptr = ptr;
-			// (ptr->edges).push_back(edge);
 			flag++;
 			flag_src = false;
 		}
 		if (ptr->vertex == target)
 		{
 			new_edge->target_ptr = ptr;
-			// (ptr->edges).push_back(edge);
 			flag++;
 			flag_target = false;
 		}
@@ -181,41 +176,30 @@ void add_new_edge(long source, long target, long weight)
 	}
 	if (flag == 0) //add both source and target
 	{
-		// cout<<"Here A"<<endl;
 		gv *s = new gv;
-		// gv s;
 		s->vertex = source;
 		new_edge->source_ptr = s;
-		// (s.edges).push_back(edge);
-				// cout<<"Here Aa"<<endl;
-
 		vertices.push_back(s);
-				// cout<<"Here Aab"<<endl;
 
 		gv *t = new gv;
 		t->vertex = target;
-		// (t.edges).push_back(edge);
 		new_edge->target_ptr = t;
 		vertices.push_back(t);
 
 	}
 	else if (flag_target == true) //target to be added
 	{
-		// cout<<"Here b"<<endl;
 		gv *t = new gv;
 		t->vertex = target;
-		// (t.edges).push_back(edge);
 		new_edge->target_ptr = t;
 		vertices.push_back(t);
 	}
 	else if (flag_src == true) //source to be added
 	{
-		// cout<<"Here C"<<endl;
+
 		gv *s = new gv;
-		// gv s;
 		s->vertex = source;
 		new_edge->source_ptr = s;
-		// (s.edges).push_back(edge);
 		vertices.push_back(s);
 
 	}
@@ -225,15 +209,11 @@ void add_new_edge(long source, long target, long weight)
 	}
 	gv *s_ptr = new_edge->source_ptr;
 	gv *t_ptr = new_edge->target_ptr;
-	// cout<<"source ptr is "<<s_ptr<<endl;
-	// cout<<"target ptr is "<<t_ptr<<endl;
-			((s_ptr)->edges).push_back(new_edge);
-			((t_ptr)->edges).push_back(new_edge);
-			 			// cout<<"Here Outside"<<endl;
 
- 			g_edges.push_back(new_edge);
+	((s_ptr)->edges).push_back(new_edge);
+	((t_ptr)->edges).push_back(new_edge);
+ 	g_edges.push_back(new_edge);
 
-	//cout<<"New updated made to vertices vector: "<<endl;
 	// vector<gv*>::iterator ptr2;
 	// for(ptr2=vertices.begin(); ptr2<vertices.end(); ptr2++)
 	// {
@@ -281,7 +261,6 @@ long prim_jarnik_mst()
     /* Looping till priority queue becomes empty */
     while (mh.Count() > 0)
     {
-    // cout<<"Dequeuing "<<endl;
      	ge *ptr_to_edge = mh.min_heap_check_top().second; 
     	ge e = *ptr_to_edge;
 
@@ -291,7 +270,6 @@ long prim_jarnik_mst()
     	{
     		continue;
     	}
-
     	long v;
     	gv *other_vertex = NULL;
     	if (inMST[e.source])
@@ -307,35 +285,27 @@ long prim_jarnik_mst()
     	mst_edges.push_back(ptr_to_edge);
     	inMST[v] = true;
 
-    	// vector<gv>::iterator ptr;
-			// for(ptr=vertices.begin(); ptr<vertices.end(); ptr++)
-			// {
+			vector<ge*>::iterator ptr2;
+			for(ptr2=(other_vertex->edges).begin(); ptr2<(other_vertex->edges).end(); ptr2++)
+			{
+				long z;
+				ge *ptr_to_edge = *ptr2;
+				ge e = *ptr_to_edge;
+				ge *edge_ptr = (ge *) &ptr2;
+				if (e.source == v)
+				{
+					z = e.target;
+				}
+				else if (e.target == v)
+				{
+					z = e.source;
+				}
+				if (inMST[z] == false)
+				{
+					mh.min_heap_enqueue(make_pair(e.weight, ptr_to_edge));
+				}
+			}		
 
-			// 	if(ptr->vertex == v)
-			// 	{
-					vector<ge*>::iterator ptr2;
-					for(ptr2=(other_vertex->edges).begin(); ptr2<(other_vertex->edges).end(); ptr2++)
-					{
-						long z;
-						ge *ptr_to_edge = *ptr2;
-					  ge e = *ptr_to_edge;
-						ge *edge_ptr = (ge *) &ptr2;
-						if (e.source == v)
-						{
-							z = e.target;
-						}
-						else if (e.target == v)
-						{
-							z = e.source;
-						}
-						if (inMST[z] == false)
-						{
-							mh.min_heap_enqueue(make_pair(e.weight, ptr_to_edge));
-						}
-					}		
-			// 	}
-
-			// }
 		}
  
 

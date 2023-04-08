@@ -5,13 +5,18 @@
 #include <sstream>
 #include <string>
 
+
 using namespace std;
 
 const int MAXN = 100005;
-int comparisons = 0;
+long num_comparisons = 0;
 
+void increment_comparison()
+{
+	num_comparisons++;
+}
 struct Edge {
-    int from, to, weight;
+    long from, to, weight;
     Edge() {}
     Edge(int from, int to, int weight) : from(from), to(to), weight(weight) {}
     bool operator<(const Edge &rhs) const {
@@ -51,7 +56,7 @@ struct BinaryHeap {
         int i = heap.size() - 1;
         while (i > 0) {
             int p = (i - 1) / 2;
-            comparisons++;
+            increment_comparison();
             if (heap[p] < heap[i]) {
                 break;
             }
@@ -60,7 +65,7 @@ struct BinaryHeap {
             i = p;
         }
     }
-    Edge pop() {
+    Edge removeMin() {
         Edge ret = heap[0];
         heap[0] = heap.back();
         heap.pop_back();
@@ -68,11 +73,11 @@ struct BinaryHeap {
         while (i * 2 + 1 < heap.size()) {
             int left = i * 2 + 1, right = i * 2 + 2;
             if (right < heap.size()) {
-                comparisons++;
+                increment_comparison();
                 if (heap[right] < heap[left])
                 left = right;
             }
-            comparisons++;
+            increment_comparison();
             if (heap[i] < heap[left]) {
                 break;
             }
@@ -88,7 +93,8 @@ struct BinaryHeap {
 };
 
 vector<Edge> kruskal(int n, vector<Edge> edges) {
-    sort(edges.begin(), edges.end());
+    // sort(edges.begin(), edges.end());
+
 
     DisjointSet dsu;
     dsu.init(n);
@@ -101,7 +107,7 @@ vector<Edge> kruskal(int n, vector<Edge> edges) {
     vector<Edge> ret;
    
     while (!heap.empty() && ret.size() < n - 1) {
-        Edge e = heap.pop();
+        Edge e = heap.removeMin();
         // comparisons++;
         if (!dsu.same(e.from, e.to)) {
             dsu.unite(e.from, e.to);
@@ -122,19 +128,6 @@ long get_total_weight(vector<Edge> &edges) {
 
 int main() {
 
-    // int n, m;
-
-    // cin.ignore(1000000, '\n'); // ignore comment lines
-
-    // cout <<"n";
-
-    // cin >> n ;
-
-    // cout <<"m";
-
-    // cin >> m;
-
-   
     char c;
 	long n = 0;
 	long m = 0;
@@ -164,16 +157,15 @@ int main() {
 	    {
 	    	if (edge_counter > 0)
 	    	{
-	    		int source;
-	    		int target;
-	    		int weight;
+	    		long source;
+	    		long target;
+	    		long weight;
 	    		cin>>c;
 	    		cin>>source;
 	    		cin>>target;
 	    		cin>>weight;
                 edges[i] = Edge(source, target, weight);
                 i++;
-	    		// add_new_edge(source, target, weight);
 	    		edge_counter--;
 	    		if (edge_counter == 0)
 	    		{
@@ -194,33 +186,6 @@ int main() {
 
 	}
 
-//     for (int i = 0; i < m; i++) {
-
-//         char c;
-
-//         int u, v, w;
-
-//         cout << "c";
-
-//         cin >> c;
-
-       
-// cout << "v";
-
-//         cin >> v;
-
-//         cout << "u";
-
-//         cin >> u;
-
-
-//         cout <<"w";
-
-//         cin >> w;
-
-//         edges[i] = Edge(u, v, w);
-
-//     }
 
     auto start_time = chrono::high_resolution_clock::now();
 
@@ -248,7 +213,7 @@ int main() {
    
     cerr << "runtime\t" << chrono::duration_cast<chrono::microseconds>(end_time - start_time).count() << " us" << endl;
 
-    cout << "Number of comparisons: " << comparisons << endl; // print counter value
+    cout << "Number of comparisons: " << num_comparisons << endl; // print counter value
 
 
 
@@ -258,68 +223,3 @@ int main() {
 
 
 
-
-// void add_new_edge(long from, long to, long weight)
-// {
-// 	Edge *new_edge = new Edge;
-// 	new_edge->from = from;
-// 	new_edge->to = to;
-// 	new_edge->weight = weight;
-// 	heap.push_back(new_edge);
-// 	// ge current_edge = g_edges[g_edges.size() - 1];
-// 	ge *edge = new_edge;
-// 	// cout<<"source = "<<source<<" target = "<<target<<" weight = "<<weight<<endl;
-// 	int flag = 0; //source and target not updated
-// 	vector<gv>::iterator ptr;
-// 	bool flag_src = true;
-// 	bool flag_target = true;
-// 	for(ptr=vertices.begin(); ptr<vertices.end(); ptr++)
-// 	{
-// 		if (ptr->vertex == source)
-// 		{
-// 			(ptr->edges).push_back(edge);
-// 			flag++;
-// 			flag_src = false;
-// 		}
-// 		if (ptr->vertex == target)
-// 		{
-// 			(ptr->edges).push_back(edge);
-// 			flag++;
-// 			flag_target = false;
-// 		}
-// 		if (flag == 2)
-// 		{
-// 			break;
-// 		}
-// 	}
-// 	if (flag == 0) //add both source and target
-// 	{
-// 		gv s;
-// 		s.vertex = source;
-// 		(s.edges).push_back(edge);
-// 		vertices.push_back(s);
-
-// 		gv t;
-// 		t.vertex = target;
-// 		(t.edges).push_back(edge);
-// 		vertices.push_back(t);
-
-// 	}
-// 	else if (flag_target == true) //target to be added
-// 	{
-// 		gv t;
-// 		t.vertex = target;
-// 		(t.edges).push_back(edge);
-// 		vertices.push_back(t);
-// 	}
-// 	else if (flag_src == true) //source to be added
-// 	{
-// 		gv s;
-// 		s.vertex = source;
-// 		(s.edges).push_back(edge);
-// 		vertices.push_back(s);
-// 	}
-// 	else //nothing to be done
-// 	{
-
-// 	}
