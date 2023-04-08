@@ -211,7 +211,7 @@ int main() {
 
     cerr << "weight\t" << get_total_weight(mst) << endl;
    
-    cerr << "runtime\t" << chrono::duration_cast<chrono::microseconds>(end_time - start_time).count() << " us" << endl;
+    cerr << "runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count() << " sec" << endl;
 
     cout << "Number of comparisons: " << num_comparisons << endl; // print counter value
 

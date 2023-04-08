@@ -14,8 +14,6 @@ long num_comparisons = 0;
 void increment_comparison()
 {
 	num_comparisons++;
-
-
 	
 }
 
@@ -41,18 +39,20 @@ public:
 	
 	int find(int i)    // Find function
 	{
-        // increment_comparison();
 		if (parent[i] == -1)
 			return i;
 
 		return parent[i] = find(parent[i]);
+        increment_comparison();
 	}
 
 	
 	void unite(int u, int v)   // Union function
 	{
 		int s = find(u);
+        
 		int t = find(v);
+    
 
         increment_comparison();
 
@@ -61,6 +61,7 @@ public:
 			if (rank[s] < rank[t]) {
 				parent[s] = t;
 			}
+            
 			else if (rank[s] > rank[t]) {
                 increment_comparison() ;
 				parent[t] = s;
@@ -82,9 +83,9 @@ public:
     Graph(int V) { this->V = V; }
 
 	// Function to add edge in a graph
-	vector<vector<int>> addEdge(int x, int y, int w)
+	vector<vector<int>> addEdge(int u, int v, int w)
 	{
-		edgelist.push_back({ w, x, y });
+		edgelist.push_back({ w, u, v });
         return edgelist;
 	}
 
@@ -101,37 +102,24 @@ public:
 			<< endl;
 		for (auto edge : edgelist) {
 			int w = edge[0];
-			int x = edge[1];
-			int y = edge[2];
+			int u = edge[1];
+			int v = edge[2];
 
 			// Take this edge in MST if it does
 			// not forms a cycle
-			if (s.find(x) != s.find(y)) {
-				s.unite(x, y);
+            increment_comparison();
+			if (s.find(u) != s.find(v)) {
+
+				s.unite(u, v);
 				ans += w;
-				cout << x << " -- " << y << " == " << w
+				cout << u << "  " << v << "  " << w
 					<< endl;
 			}
 		}
-		cout << "Minimum Cost Spanning Tree: " << ans<<endl;
+		cout <<endl<< "weight of mst: " << ans;
 	}
 };
 
-// // Driver code
-// int main()
-// {
-// 	Graph g(5);
-// 	g.addEdge(1, 2, 1);
-// 	g.addEdge(2, 3, 2);
-// 	g.addEdge(3, 4, 1);
-// 	g.addEdge(4, 5, 1);
-// 	g.addEdge(1, 5, 1);
-
-// 	// Function call
-// 	g.kruskals_mst();
-
-// 	return 0;
-// }
 
 int main() {
 
@@ -200,6 +188,8 @@ int main() {
     auto end_time = chrono::high_resolution_clock::now();
 
     cout<<endl <<"number of comparisons: "<<num_comparisons<<endl;
+    cerr << "runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count() << " sec" << endl;
+
 
 
     return 0;
