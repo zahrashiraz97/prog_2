@@ -144,6 +144,7 @@ class min_heap {
 
 void add_new_edge(long source, long target, long weight)
 {
+	// cout<<"Adding new edge"<<endl;
 	ge *new_edge = new ge;
 	new_edge->source = source;
 	new_edge->target = target;
@@ -252,6 +253,7 @@ void add_new_edge(long source, long target, long weight)
 
 long prim_jarnik_mst()
 {
+	// cout<<"Inside prims"<<endl;
 	long num_vertices = vertices.size();
     min_heap<ePair> mh;
 
@@ -279,7 +281,7 @@ long prim_jarnik_mst()
     /* Looping till priority queue becomes empty */
     while (mh.Count() > 0)
     {
-    cout<<"Dequeuing "<<endl;
+    // cout<<"Dequeuing "<<endl;
      	ge *ptr_to_edge = mh.min_heap_check_top().second; 
     	ge e = *ptr_to_edge;
 
