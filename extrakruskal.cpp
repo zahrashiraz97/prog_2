@@ -14,6 +14,9 @@ long num_comparisons = 0;
 void increment_comparison()
 {
 	num_comparisons++;
+
+
+	
 }
 
 // kruskal_v data structure
