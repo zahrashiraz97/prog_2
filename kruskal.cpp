@@ -13,7 +13,7 @@ long num_comparisons = 0;
 
 void increment_comparison()
 {
-	num_comparisons++;
+    num_comparisons++;
 }
 struct Edge {
     long from, to, weight;
@@ -129,62 +129,62 @@ long get_total_weight(vector<Edge> &edges) {
 int main() {
 
     char c;
-	long n = 0;
-	long m = 0;
-	int flag = 0;
-	int edge_counter = 0;
+    long n = 0;
+    long m = 0;
+    int flag = 0;
+    int edge_counter = 0;
      vector<Edge> edges;
      int i = 0;
-	while((c = cin.peek())) {
-		if (c == 'c')
-		{
-	    	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-		else if (c == 'n')
-		{
-	    	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-	    else if ((c == 'g') && (flag != 1))
-	    {
-	    	cin>>c;
-	    	cin>>n;
-	    	cin>>m;
-	    	flag = 1;
-	    	edge_counter = m;
+    while((c = cin.peek())) {
+        if (c == 'c')
+        {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        else if (c == 'n')
+        {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        else if ((c == 'g') && (flag != 1))
+        {
+            cin>>c;
+            cin>>n;
+            cin>>m;
+            flag = 1;
+            edge_counter = m;
             edges.resize(m);
-	    }
-	    else if ((c == 'e') && (flag == 1))
-	    {
-	    	if (edge_counter > 0)
-	    	{
-	    		long source;
-	    		long target;
-	    		long weight;
-	    		cin>>c;
-	    		cin>>source;
-	    		cin>>target;
-	    		cin>>weight;
+        }
+        else if ((c == 'e') && (flag == 1))
+        {
+            if (edge_counter > 0)
+            {
+                long source;
+                long target;
+                long weight;
+                cin>>c;
+                cin>>source;
+                cin>>target;
+                cin>>weight;
                 edges[i] = Edge(source, target, weight);
                 i++;
-	    		edge_counter--;
-	    		if (edge_counter == 0)
-	    		{
-	    			break;
-	    		}
-	    	}
-	    	else
-	    	{
-	    		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                edge_counter--;
+                if (edge_counter == 0)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-	    	}
+            }
 
-	    }
-	    else
-	    {
-	    	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	    }
+        }
+        else
+        {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
 
-	}
+    }
 
 
     auto start_time = chrono::high_resolution_clock::now();
@@ -220,6 +220,7 @@ int main() {
     return 0;
 
 }
+
 
 
 
