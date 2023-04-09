@@ -1,29 +1,14 @@
 # prog_2
 Program 2 of CSC 505
 
-Programs must run from the command line and read input from standard input in gph format, as described here.
-        c comment line 1
-        ...
-        c comment line k
-        g number_of_nodes number_of_edges
-	  --------------- (not part of the input)
-        OPTIONAL node position info (for conversion to graphml)
-        n v_1 x_1 y_1
-        ...
-        n v_n x_n y_n
-        ------------
-        ALWAYS
-        e source_1 target_1 weight_1
-        ...
-        e source_m target_m weight_m
-
-    v_1 through v_n are node numbers, typically 1 through n
-    x_i, y_i are x and y coordinates of v_i
-
+We have implemented one version of Prim's and two versions of Kruskal's algorithms:
+1. Prim's algorithm with lazy deletion (uses min heap)
+2. Kruskal's with use of min heap and disjoint sets
+3. Kruskal's where the edges are sorted 
 
 Sample program: 
 
-Compilation: g++ -o file_name prims.cpp
+Compilation: g++ -o file_name program.cpp
 
 Execution: cat graph.gph | ./file_name
 
