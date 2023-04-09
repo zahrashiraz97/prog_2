@@ -10,6 +10,7 @@ using namespace std;
 
 const int MAXN = 100005;
 long num_comparisons = 0;
+long num_edge = 0;
 
 void increment_comparison()
 {
@@ -189,21 +190,29 @@ int main() {
 
     auto start_time = chrono::high_resolution_clock::now();
 
+    
+
     vector<Edge> mst = kruskal(n, edges);
-
-    auto end_time = chrono::high_resolution_clock::now();
-
-
-
-    // output results
-
     cout << "g " << n << " " << mst.size() << endl;
 
     for (auto &e : mst) {
 
         cout << "e " << e.from << " " << e.to << " " << e.weight << endl;
+        num_edge ++ ;
+
 
     }
+
+    if (num_edge!= n -1 ) {
+        cerr<<"Error! Disconnected graph provided"<<endl;
+    }
+
+    auto end_time = chrono::high_resolution_clock::now();
+
+
+    
+
+    
 
 
 
@@ -212,6 +221,8 @@ int main() {
     cerr << "weight\t" << get_total_weight(mst) << endl;
     cerr << "runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count()<<endl;
     cerr<<"comparisons\t"<<num_comparisons<<endl;
+    cerr<<"edges\t"<<num_edge<<endl;
+
 
 
 

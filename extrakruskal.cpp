@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -11,11 +10,20 @@ using namespace std;
 
 long num_comparisons = 0;
 int num_vertices = 0;
+long num_edge = 0;
+
 void increment_comparison()
 {
 	num_comparisons++;
 	
 }
+
+struct Edge {
+    long u, v, w;
+    Edge() {}
+    Edge(int u, int v, int w) : u(u), v(v), w(w) {}
+
+};
 
 // kruskal_v data structure
 
@@ -43,7 +51,7 @@ public:
 			return i;
 
 		return parent[i] = find(parent[i]);
-        increment_comparison();
+
 	}
 
 	
@@ -54,7 +62,6 @@ public:
 		int t = find(v);
     
 
-        increment_comparison();
 
 		if (s != t) {
             increment_comparison();
@@ -101,8 +108,8 @@ public:
 		// Initialize the kruskal_v
 		kruskal_v s(V);
 		int ans = 0;
-		cout<<"g "<<num_vertices<<" "<<num_vertices-1<<endl;
-
+		vector<Edge> e ;
+		
 		for (auto edge : edgelist) {
 			int w = edge[0];
 			int u = edge[1];
@@ -110,14 +117,30 @@ public:
 
 			// Take this edge in MST if it does
 			// not forms a cycle
-            increment_comparison();
+            
 			if (s.find(u) != s.find(v)) {
 
 				s.unite(u, v);
 				ans += w;
-				cout <<"e "<<u <<" "<< v <<" "<< w<< endl;
+
+				e.push_back(Edge(u, v, w));
+
+				
+
+				// cout <<"e "<<u <<" "<< v <<" "<< w<< endl;
+				num_edge ++ ;
 			}
+
 		}
+	cout<<"g"<<" "<<num_vertices<<" "<<num_edge<<endl;
+	vector<Edge>::iterator mst;
+    
+	for(mst=e.begin(); mst<e.end(); mst++)
+	{
+		Edge e1 = *mst;
+		
+		cout<<"e "<<e1.u<<" "<<e1.v<<" "<<e1.w<<endl;
+	}
 	cerr<<"weight\t"<<ans<<endl;
 	}
 };
@@ -188,10 +211,16 @@ int main() {
     auto start_time = chrono::high_resolution_clock::now();
     	g.secondkruskals_mst();
 
+
     auto end_time = chrono::high_resolution_clock::now();
+
 
     cerr <<"runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count()<< endl;
 	cerr<<"comparisons\t"<<num_comparisons<<endl;
+
+	if(num_edge!= n-1) {
+		 cerr<<"Error! Disconnected graph provided"<<endl;
+	}
 
 
 
