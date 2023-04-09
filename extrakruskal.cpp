@@ -75,7 +75,7 @@ public:
 };
 
 class Graph {
-	vector<vector<int>> edgelist;
+	vector<vector<int> > edgelist;
 	int V;
 
 public:
@@ -83,7 +83,7 @@ public:
     Graph(int V) { this->V = V; }
 
 	// Function to add edge in a graph
-	vector<vector<int>> addEdge(int u, int v, int w)
+	vector<vector<int> > addEdge(int u, int v, int w)
 	{
 		edgelist.push_back({ w, u, v });
         return edgelist;
@@ -97,9 +97,7 @@ public:
 		// Initialize the kruskal_v
 		kruskal_v s(V);
 		int ans = 0;
-		cerr << "Following are the edges in the "
-				"constructed MST"
-			<< endl;
+
 		for (auto edge : edgelist) {
 			int w = edge[0];
 			int u = edge[1];

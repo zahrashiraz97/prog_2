@@ -6,8 +6,6 @@
 using namespace std;
 using namespace std::chrono;
 
-# define INF 0x3f3f3f3f
-
 typedef struct ge //graph edge
 {
 	long source; //vertex on one end
@@ -44,7 +42,6 @@ class min_heap {
   vector<T> data;
  
   public:
-  // Implementing Priority Queue using inbuilt available vector in C++
   min_heap() {}
  
   // Element Inserting function
@@ -134,17 +131,10 @@ class min_heap {
   }
 };
 
-// for each line of the form e v_1 v_2 wt do
-// either …
-// create a new edge object with two endpoints and weight
-// add a reference/pointer to it to the ArrayList/vector
-// … or, if you did 2(b)
-// put the data into the edge array at position index and increment index
-// put a reference to the the edge object on the list of incident edges of v_1 and v_2
 
 void add_new_edge(long source, long target, long weight)
 {
-	ge *new_edge = new ge;
+	ge *new_edge = new ge; // creating new edge 
 	new_edge->source = source;
 	new_edge->target = target;
 	new_edge->weight = weight;
@@ -176,7 +166,7 @@ void add_new_edge(long source, long target, long weight)
 	}
 	if (flag == 0) //add both source and target
 	{
-		gv *s = new gv;
+		gv *s = new gv; // creating new vertex
 		s->vertex = source;
 		new_edge->source_ptr = s;
 		vertices.push_back(s);
@@ -214,26 +204,11 @@ void add_new_edge(long source, long target, long weight)
 	((t_ptr)->edges).push_back(new_edge);
  	g_edges.push_back(new_edge);
 
-	// vector<gv*>::iterator ptr2;
-	// for(ptr2=vertices.begin(); ptr2<vertices.end(); ptr2++)
-	// {
-	// 	gv *v_ptr = *ptr2;
-	// 	gv v = *v_ptr;
-	// 	//cout<<"Vertex is "<<v.vertex<<endl;
-	// 	vector<ge*>::iterator ptr;
-	// 	for(ptr=(v.edges).begin(); ptr<(v.edges).end(); ptr++)
-	// 	{
-	// 		ge *e = *ptr;
-	// 		// ge edge = *e;
-	// 		cout<<"Vertex "<<v.vertex<<"edge "<<e->source<<" "<<e->target<<" "<<e->weight<<endl;
-	// 	}
-	// }
 }
 
 
 long prim_jarnik_mst()
 {
-	// cout<<"Inside prims"<<endl;
 	long num_vertices = vertices.size();
     min_heap<ePair> mh;
 
