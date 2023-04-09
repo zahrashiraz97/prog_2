@@ -232,6 +232,8 @@ long prim_jarnik_mst()
 				inMST[v.vertex] = true;
 				break; //only for the first vertex
 			}
+
+			int edges_check = 0;
  
     /* Looping till priority queue becomes empty */
     while (mh.Count() > 0)
@@ -282,7 +284,7 @@ long prim_jarnik_mst()
 			}		
 
 		}
- 
+
 
     vector<ge*>::iterator mst;
     long mst_weight = 0;
@@ -293,6 +295,11 @@ long prim_jarnik_mst()
 		ge e = *ptr_to_edge;
 		cout<<"e "<<e.source<<" "<<e.target<<" "<<e.weight<<endl;
 		mst_weight += e.weight;
+		edges_check++;
+	}
+	if (edges_check != num_vertices-1)
+	{
+		cout<<"Error! Disconnected graph provided"<<endl;
 	}
 
 	return mst_weight;
