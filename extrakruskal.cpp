@@ -10,7 +10,7 @@
 using namespace std;
 
 long num_comparisons = 0;
-
+int num_vertices = 0;
 void increment_comparison()
 {
 	num_comparisons++;
@@ -85,7 +85,11 @@ public:
 	// Function to add edge in a graph
 	vector<vector<int> > addEdge(int u, int v, int w)
 	{
-		edgelist.push_back({ w, u, v });
+		std::vector<int> edge;
+		edge.push_back(w);
+		edge.push_back(u);
+		edge.push_back(v);
+		edgelist.push_back(edge);
         return edgelist;
 	}
 
@@ -97,6 +101,7 @@ public:
 		// Initialize the kruskal_v
 		kruskal_v s(V);
 		int ans = 0;
+		cout<<"g "<<num_vertices<<" "<<num_vertices-1<<endl;
 
 		for (auto edge : edgelist) {
 			int w = edge[0];
@@ -110,11 +115,10 @@ public:
 
 				s.unite(u, v);
 				ans += w;
-				cout << u << "  " << v << "  " << w
-					<< endl;
+				cout <<"e "<<u <<" "<< v <<" "<< w<< endl;
 			}
 		}
-		cout <<endl<< "weight of mst: " << ans;
+	cerr<<"weight\t"<<ans<<endl;
 	}
 };
 
@@ -143,6 +147,7 @@ int main() {
 	    	cin>>n;
 	    	cin>>m;
 	    	flag = 1;
+	    	num_vertices = n;
 	    	edge_counter = m;
             g = Graph(n);
 	    }
@@ -185,8 +190,8 @@ int main() {
 
     auto end_time = chrono::high_resolution_clock::now();
 
-    cout<<endl <<"number of comparisons: "<<num_comparisons<<endl;
-    cerr << "runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count() << " sec" << endl;
+    cerr <<"runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count()<< endl;
+	cerr<<"comparisons\t"<<num_comparisons<<endl;
 
 
 

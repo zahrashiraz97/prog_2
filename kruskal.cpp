@@ -210,10 +210,9 @@ int main() {
     // output statistics to standard error
 
     cerr << "weight\t" << get_total_weight(mst) << endl;
-   
-    cerr << "runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count() << " sec" << endl;
+    cerr << "runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count()<<endl;
+    cerr<<"comparisons\t"<<num_comparisons<<endl;
 
-    cout << "Number of comparisons: " << num_comparisons << endl; // print counter value
 
 
 
