@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const int MAXN = 100005;
+int MAXN = 100000000;
 long num_comparisons = 0;
 long num_edge = 0;
 
@@ -26,7 +26,7 @@ struct Edge {
 };
 
 struct DisjointSet {
-    int parent[MAXN];
+    int *parent = new int [MAXN];
     void init(int n) {
         for (int i = 0; i <= n; i++) {
             parent[i] = i;
@@ -197,7 +197,7 @@ int main() {
 
     for (auto &e : mst) {
 
-        cout << "e " << e.from << " " << e.to << " " << e.weight << endl;
+        // cout << "e " << e.from << " " << e.to << " " << e.weight << endl;
         num_edge ++ ;
 
 
@@ -220,6 +220,8 @@ int main() {
 
     cerr << "weight\t" << get_total_weight(mst) << endl;
     cerr << "runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count()<<endl;
+    // double seconds = static_cast<double>((end_time - start_time).count()) / 1000000 ;
+    // cerr<<"seconds\t"<<seconds<<endl;
     cerr<<"comparisons\t"<<num_comparisons<<endl;
     cerr<<"edges\t"<<num_edge<<endl;
 

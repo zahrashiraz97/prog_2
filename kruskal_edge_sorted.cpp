@@ -132,7 +132,7 @@ public:
 			}
 
 		}
-	cout<<"g"<<" "<<num_vertices<<" "<<num_edge<<endl;
+	// cout<<"g"<<" "<<num_vertices<<" "<<num_edge<<endl;
 	vector<Edge>::iterator mst;
     
 	for(mst=e.begin(); mst<e.end(); mst++)
@@ -215,7 +215,10 @@ int main() {
     auto end_time = chrono::high_resolution_clock::now();
 
 
-    cerr <<"runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count()<< endl;
+    cerr <<"runtime\t" << chrono::duration_cast<chrono::microseconds>(end_time - start_time).count()<< endl;
+	double seconds = static_cast<double>((end_time - start_time).count()) / 1000000 ;
+	cerr<<"seconds\t"<<seconds<<endl ;
+
 	cerr<<"comparisons\t"<<num_comparisons<<endl;
 
 	if(num_edge!= n-1) {

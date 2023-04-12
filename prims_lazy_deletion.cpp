@@ -293,7 +293,7 @@ long prim_jarnik_mst()
 	{
 		ge *ptr_to_edge = *mst;
 		ge e = *ptr_to_edge;
-		cout<<"e "<<e.source<<" "<<e.target<<" "<<e.weight<<endl;
+		// cout<<"e "<<e.source<<" "<<e.target<<" "<<e.weight<<endl;
 		mst_weight += e.weight;
 		edges_check++;
 	}
@@ -365,9 +365,11 @@ int main()
 	auto start = high_resolution_clock::now();
 	long mst_weight = prim_jarnik_mst();
 	auto stop = high_resolution_clock::now();
-	auto duration = duration_cast<seconds>(stop - start);
+	auto duration = duration_cast<microseconds>(stop - start);
+	double seconds = static_cast<double>(duration.count()) / 1000000 ;
 	cerr<<"weight\t"<<mst_weight<<endl;
 	cerr<<"runtime\t"<<duration.count()<<endl;
+	cerr<<"seconds\t"<<seconds<<endl;
 	cerr<<"comparisons\t"<<num_comparisons<<endl;
 	return 0;
 }
