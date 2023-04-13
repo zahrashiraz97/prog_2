@@ -1,16 +1,14 @@
+// Kruskal's algorithm in C++ with sorted edges
+
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <chrono>
-#include <sstream>
-#include <string>
-
-
 using namespace std;
 
+#define edge pair<int, int>
+
 long num_comparisons = 0;
-int num_vertices = 0;
 long num_edge = 0;
+
 
 void increment_comparison()
 {
@@ -18,143 +16,90 @@ void increment_comparison()
 	
 }
 
-struct Edge {
-    long u, v, w;
-    Edge() {}
-    Edge(int u, int v, int w) : u(u), v(v), w(w) {}
-
-};
-
-// kruskal_v data structure
-
-// path compression + rank by union
-class kruskal_v {
-	int* parent;
-	int* rank;
-
-public:
-	kruskal_v(int n)
-	{
-		parent = new int[n];
-		rank = new int[n];
-
-		for (int i = 0; i < n; i++) {
-			parent[i] = -1;
-			rank[i] = 1;
-		}
-	}
-
-	
-	int find(int i)    // Find function
-	{
-		if (parent[i] == -1)
-			return i;
-
-		return parent[i] = find(parent[i]);
-
-	}
-
-	
-	void unite(int u, int v)   // Union function
-	{
-		int s = find(u);
-        
-		int t = find(v);
-    
-
-
-		if (s != t) {
-            increment_comparison();
-			if (rank[s] < rank[t]) {
-				parent[s] = t;
-			}
-            
-			else if (rank[s] > rank[t]) {
-                increment_comparison() ;
-				parent[t] = s;
-			}
-			else {
-				parent[t] = s;
-				rank[s] += 1;
-			}
-		}
-	}
-};
-
 class Graph {
-	vector<vector<int> > edgelist;
-	int V;
+   private:
+  vector<pair<int, edge> > G;  // graph
+  vector<pair<int, edge> > T;  // mst
+  int *parent;
+  int V;  // number of vertices in graph
+  public:
+  Graph(int V) {
+  parent = new int[V];
 
-public:
-	Graph() {}
-    Graph(int V) { this->V = V; }
+  for (int i = 0; i < V; i++)
+    parent[i] = i;
 
-	// Function to add edge in a graph
-	vector<vector<int> > addEdge(int u, int v, int w)
-	{
-		std::vector<int> edge;
-		edge.push_back(w);
-		edge.push_back(u);
-		edge.push_back(v);
-		edgelist.push_back(edge);
-        return edgelist;
-	}
+}
 
-	void secondkruskals_mst()
-	{
-		// Sort all edges
-		sort(edgelist.begin(), edgelist.end());
+// function to add edges
+  void AddWeightedEdge(int u, int v, int w){
+  G.push_back(make_pair(w, edge(u, v)));
+}
 
-		// Initialize the kruskal_v
-		kruskal_v s(V);
-		int ans = 0;
-		vector<Edge> e ;
-		
-		for (auto edge : edgelist) {
-			int w = edge[0];
-			int u = edge[1];
-			int v = edge[2];
+// find set function to remove cycles from mst
+  int find_set(int i){
+  
+  increment_comparison();
 
-			// Take this edge in MST if it does
-			// not forms a cycle
-            
-			if (s.find(u) != s.find(v)) {
+  // If i is the parent of itself
+  if (i == parent[i])
+    return i;
+  else
+    // Else if i is not the parent of itself
+    // Then then some other vertex is parent of this set,
+    // so recursively calling find_set on its parent
+    return find_set(parent[i]);
+}
+// union_set for uniting disjoint sets to find mst
+  void union_set(int u, int v){
+  parent[u] = parent[v];
+}
 
-				s.unite(u, v);
-				ans += w;
+// kruskal algorithm function
+  void kruskal(){
+  int i, source, target;
+  sort(G.begin(), G.end());  // sorting in ascending order
 
-				e.push_back(Edge(u, v, w));
+  // traversing through the graph
+  for (i = 0; i < G.size(); i++) {
+    // G[i] has two values as it is a pair.
+    //Here we are trying to find source and target of the current edge for mst
+    source = find_set(G[i].second.first);
+    target = find_set(G[i].second.second);
+    if (source != target) {
+      T.push_back(G[i]);  // add to tree
+      num_edge ++ ;
+      union_set(source, target);
+    }
+  }
+}
+  void print(){
+  long total_weight = 0 ;
 
-				
 
-				// cout <<"e "<<u <<" "<< v <<" "<< w<< endl;
-				num_edge ++ ;
-			}
 
-		}
-	// cout<<"g"<<" "<<num_vertices<<" "<<num_edge<<endl;
-	vector<Edge>::iterator mst;
+  for (int i = 0; i < T.size(); i++) {
+    // cout << "e "<<T[i].second.first<<" "<<T[i].second.second << " "<< T[i].first<< endl;
+
+    total_weight += T[i].first;
     
-	for(mst=e.begin(); mst<e.end(); mst++)
-	{
-		Edge e1 = *mst;
-		
-		cout<<"e "<<e1.u<<" "<<e1.v<<" "<<e1.w<<endl;
-	}
-	cerr<<"weight\t"<<ans<<endl;
-	}
+  }
+
+  cout<<"total weight\t"<<total_weight<<endl;
+}
 };
 
 
 int main() {
-
     char c;
-	long n = 0;
-	long m = 0;
+	long n = 0; // number of vertices
+	long m = 0; // number of edges
 	int flag = 0;
-	int edge_counter = 0;
-     Graph g;
-     int i = 0;
+	int edge_counter = 0; // for counting number of edges
+    
+    Graph g(n);
+
+    int i = 0;
 	while((c = cin.peek())) {
 		if (c == 'c')
 		{
@@ -170,7 +115,6 @@ int main() {
 	    	cin>>n;
 	    	cin>>m;
 	    	flag = 1;
-	    	num_vertices = n;
 	    	edge_counter = m;
             g = Graph(n);
 	    }
@@ -185,7 +129,7 @@ int main() {
 	    		cin>>source;
 	    		cin>>target;
 	    		cin>>weight;
-                g.addEdge(source, target, weight);
+                g.AddWeightedEdge(source, target, weight);
                 i++;
 	    		edge_counter--;
 	    		if (edge_counter == 0)
@@ -207,29 +151,20 @@ int main() {
 
 	}
 
-
     auto start_time = chrono::high_resolution_clock::now();
-    	g.secondkruskals_mst();
-
+    	g.kruskal();
 
     auto end_time = chrono::high_resolution_clock::now();
 
+    cerr<< "g "<<n<<" "<<num_edge<<endl;
 
-    cerr <<"runtime\t" << chrono::duration_cast<chrono::microseconds>(end_time - start_time).count()<< endl;
-	double seconds = static_cast<double>((end_time - start_time).count()) / 1000000 ;
-	cerr<<"seconds\t"<<seconds<<endl ;
+    cerr << "runtime\t" << chrono::duration_cast<chrono::microseconds>(end_time - start_time).count()<< endl;
+    cerr << "number of comparisons\t" << num_comparisons<<endl ;
+    // cerr<< "number of edges "<<num_edge<<endl;
+  g.print();
 
-	cerr<<"comparisons\t"<<num_comparisons<<endl;
-
-	if(num_edge!= n-1) {
+  if(num_edge!= n-1) {
 		 cerr<<"Error! Disconnected graph provided"<<endl;
 	}
-
-
-
-    return 0;
-
+  return 0;
 }
-
-
-

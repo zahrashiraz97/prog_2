@@ -4,11 +4,12 @@
 #include <chrono>
 #include <sstream>
 #include <string>
+#include <unistd.h>
 
 
 using namespace std;
 
-int MAXN = 100000000;
+const int MAXN = 100005;
 long num_comparisons = 0;
 long num_edge = 0;
 
@@ -26,7 +27,7 @@ struct Edge {
 };
 
 struct DisjointSet {
-    int *parent = new int [MAXN];
+    int parent[MAXN];
     void init(int n) {
         for (int i = 0; i <= n; i++) {
             parent[i] = i;
@@ -189,6 +190,7 @@ int main() {
 
 
     auto start_time = chrono::high_resolution_clock::now();
+    
 
     
 
@@ -219,9 +221,7 @@ int main() {
     // output statistics to standard error
 
     cerr << "weight\t" << get_total_weight(mst) << endl;
-    cerr << "runtime\t" << chrono::duration_cast<chrono::seconds>(end_time - start_time).count()<<endl;
-    // double seconds = static_cast<double>((end_time - start_time).count()) / 1000000 ;
-    // cerr<<"seconds\t"<<seconds<<endl;
+    cerr << "runtime\t" << chrono::duration_cast<chrono::microseconds>(end_time - start_time).count()<<endl;
     cerr<<"comparisons\t"<<num_comparisons<<endl;
     cerr<<"edges\t"<<num_edge<<endl;
 

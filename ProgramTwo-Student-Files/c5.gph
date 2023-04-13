@@ -1,7 +1,0 @@
-c a cycle with 5 nodes, one edge has greater weight than the others
-g 5 5
-e 1 2 1
-e 2 3 2
-e 3 4 1
-e 4 5 1
-e 1 5 1

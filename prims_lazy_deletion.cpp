@@ -366,10 +366,8 @@ int main()
 	long mst_weight = prim_jarnik_mst();
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
-	double seconds = static_cast<double>(duration.count()) / 1000000 ;
 	cerr<<"weight\t"<<mst_weight<<endl;
 	cerr<<"runtime\t"<<duration.count()<<endl;
-	cerr<<"seconds\t"<<seconds<<endl;
 	cerr<<"comparisons\t"<<num_comparisons<<endl;
 	return 0;
 }
